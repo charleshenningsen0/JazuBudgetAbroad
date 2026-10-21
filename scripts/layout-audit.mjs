@@ -143,9 +143,19 @@ try {
   const expectedSticky = width <= 900
   const stickyOk = r.stickyVisible === expectedSticky
   console.log(`Sticky bar correct for viewport: ${stickyOk ? 'OK' : 'WRONG'}`)
+
+  // The number of breakdown rows follows the selected categories in the URL.
+  const catParam = new URL(url, 'http://localhost').searchParams.get('c')
+  const expectedRows = catParam === null ? 5 : catParam.split(',').filter(Boolean).length
+  const rowsOk = r.breakdownRows === expectedRows
   console.log(
-    `Verdict: ${r.overflow <= 0 && r.headline && r.breakdownRows === 5 && stickyOk ? 'PASS' : 'CHECK'}`,
+    `Breakdown rows ${r.breakdownRows} (expected ${expectedRows}): ${rowsOk ? 'OK' : 'MISMATCH'}`,
   )
+
+  const pass =
+    r.overflow <= 0 && r.headline && rowsOk && stickyOk && r.statCount === 4 && r.tips > 0
+  console.log(`Verdict: ${pass ? 'PASS' : 'CHECK'}`)
+  if (!pass) process.exitCode = 1
 } catch (err) {
   console.error('Audit failed:', err.message)
   process.exitCode = 1

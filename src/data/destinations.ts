@@ -34,6 +34,11 @@ export interface Destination {
   extras: number
   flight: number
   visa: number
+  /**
+   * Destinations sharing a visa group are charged a single visa for the whole
+   * trip (all Schengen countries share one). Defaults to the country name.
+   */
+  visaGroup?: string
   /** Cheap student-friendly food spots / market info for tips. */
   tip: string
 }
@@ -89,6 +94,7 @@ export const DESTINATIONS: Destination[] = [
     extras: 12,
     flight: 880,
     visa: 90,
+    visaGroup: 'Schengen',
     tip: 'A Navigo Easy card covers all transit for a week; bakeries are the cheapest lunch in the city.',
   },
   {
@@ -106,6 +112,7 @@ export const DESTINATIONS: Destination[] = [
     extras: 10,
     flight: 820,
     visa: 90,
+    visaGroup: 'Schengen',
     tip: 'Book Barcelona flats a few months out; T-mobilitat zones you out of the tourist core.',
   },
   {
@@ -123,6 +130,7 @@ export const DESTINATIONS: Destination[] = [
     extras: 9,
     flight: 810,
     visa: 90,
+    visaGroup: 'Schengen',
     tip: 'Mercado de San Miguel looks pricey — eat at the market stalls behind it for a third of the price.',
   },
   {
@@ -140,6 +148,7 @@ export const DESTINATIONS: Destination[] = [
     extras: 10,
     flight: 860,
     visa: 90,
+    visaGroup: 'Schengen',
     tip: 'Many museums are free or discounted for EU/EEA students — always ask for a student rate.',
   },
   {
@@ -157,6 +166,7 @@ export const DESTINATIONS: Destination[] = [
     extras: 10,
     flight: 880,
     visa: 90,
+    visaGroup: 'Schengen',
     tip: 'Trenord regional trains to Lakes Como or Varenna are student-priced and cheap.',
   },
   {
@@ -174,6 +184,7 @@ export const DESTINATIONS: Destination[] = [
     extras: 12,
     flight: 900,
     visa: 90,
+    visaGroup: 'Schengen',
     tip: 'A day pass on all GVB trams, buses and metro is cheaper than single tickets for tourists.',
   },
   {
@@ -191,6 +202,7 @@ export const DESTINATIONS: Destination[] = [
     extras: 9,
     flight: 870,
     visa: 90,
+    visaGroup: 'Schengen',
     tip: 'Berlin has a semester contribution fee in some programs — check if it covers transport.',
   },
   {
@@ -208,6 +220,7 @@ export const DESTINATIONS: Destination[] = [
     extras: 10,
     flight: 880,
     visa: 90,
+    visaGroup: 'Schengen',
     tip: 'Student canteens (Mensa) serve lunch for a few euros — the single biggest food saver.',
   },
   {
@@ -242,6 +255,7 @@ export const DESTINATIONS: Destination[] = [
     extras: 12,
     flight: 950,
     visa: 90,
+    visaGroup: 'Schengen',
     tip: 'A Swiss Travel Pass for 8 days can beat buying point-to-point tickets if you take 3+ trains.',
   },
   {
@@ -259,6 +273,7 @@ export const DESTINATIONS: Destination[] = [
     extras: 10,
     flight: 900,
     visa: 90,
+    visaGroup: 'Schengen',
     tip: 'Vienna City Card and weekly transit passes are cheaper than individual tickets.',
   },
   {
@@ -276,6 +291,7 @@ export const DESTINATIONS: Destination[] = [
     extras: 7,
     flight: 780,
     visa: 90,
+    visaGroup: 'Schengen',
     tip: 'Czech universities charge in euros to EU students — budget your living money in crowns.',
   },
   {
@@ -293,6 +309,7 @@ export const DESTINATIONS: Destination[] = [
     extras: 6,
     flight: 780,
     visa: 90,
+    visaGroup: 'Schengen',
     tip: 'Budapest has no separate student transit card, but the 24-hour passes add up quickly.',
   },
   {
@@ -310,6 +327,7 @@ export const DESTINATIONS: Destination[] = [
     extras: 6,
     flight: 780,
     visa: 90,
+    visaGroup: 'Schengen',
     tip: 'Studenci (student) discounts apply to museums and intercity buses — always ask.',
   },
   {
@@ -327,6 +345,7 @@ export const DESTINATIONS: Destination[] = [
     extras: 12,
     flight: 900,
     visa: 90,
+    visaGroup: 'Schengen',
     tip: 'Rejsekort is a 7-day travel card that covers trains, buses and metro in one zone system.',
   },
   {
@@ -344,6 +363,7 @@ export const DESTINATIONS: Destination[] = [
     extras: 11,
     flight: 900,
     visa: 90,
+    visaGroup: 'Schengen',
     tip: 'Student housing queues are long — apply the day your place is confirmed.',
   },
 

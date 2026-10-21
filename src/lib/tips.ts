@@ -11,18 +11,46 @@ export interface Tip {
  * Builds practical, destination-aware saving tips for the current selection.
  */
 export function buildTips(
-  destination: Destination,
+  destinations: Destination[],
   tier: Tier,
   days: number,
   perDay: number,
+  travelers: number,
 ): Tip[] {
-  const tips: Tip[] = [
-    {
-      title: destination.tip,
-      detail: `Insider tip for ${destination.city} — the kind of thing that quietly saves hundreds over a semester.`,
+  const tips: Tip[] = []
+  const seen = new Set<string>()
+
+  // One location tip per destination, skipping repeats of the same city.
+  for (const dest of destinations) {
+    if (seen.has(dest.city)) continue
+    seen.add(dest.city)
+    tips.push({
+      title: `Save money in ${dest.city}`,
+      detail: dest.tip,
       tone: 'save',
-    },
-  ]
+    })
+  }
+
+  const isMultiDestination = destinations.length > 1
+  const uniqueRegions = new Set(destinations.map((d) => d.region)).size
+
+  if (isMultiDestination) {
+    const repacks = destinations.length - 1
+    tips.push({
+      title: 'Pack for the whole trip, not each stop',
+      detail: `Travelling through ${destinations.length} destinations means repacking ${repacks === 1 ? 'once' : `${repacks} times`}. Bring a full-size suitcase and wash clothes at a hostel laundry rather than packing for every climate separately.`,
+      tone: 'save',
+    })
+  }
+
+  if (uniqueRegions > 1) {
+    tips.push({
+      title: 'Price each region separately',
+      detail:
+        'Your airfare is estimated one return ticket per region, so a trip spanning two regions costs more to fly than a single-country one. Compare open-jaw and multi-city fares before booking.',
+      tone: 'info',
+    })
+  }
 
   const longStay = days >= 60
   if (longStay) {
@@ -35,9 +63,12 @@ export function buildTips(
   }
 
   if (tier.id === 'frugal') {
+    const foodSaving = Math.round(
+      destinations.reduce((sum, d) => sum + d.food * tier.mult.food, 0) * days * 0.35,
+    )
     tips.push({
       title: 'Cook one meal a day',
-      detail: `Cooking roughly one meal a day saves around $${Math.round(destination.food * tier.mult.food * days * 0.35)} across this trip in ${destination.city}.`,
+      detail: `Cooking roughly one meal a day saves around $${foodSaving} across this trip.`,
       tone: 'save',
     })
   }
@@ -51,6 +82,14 @@ export function buildTips(
     })
   }
 
+  if (travelers > 1) {
+    tips.push({
+      title: 'Agree on a shared daily cap',
+      detail: `With ${travelers} people, a shared budget for meals and nights out stops the total drifting upward. Split the difference in cash at the end of each week.`,
+      tone: 'save',
+    })
+  }
+
   if (days >= 14) {
     tips.push({
       title: 'Get a transit pass, not single tickets',
@@ -60,11 +99,17 @@ export function buildTips(
     })
   }
 
-  tips.push({
-    title: 'Watch the exchange rate',
-    detail: `Cash is usually better than card abroad, but exchange at a mid-market rate. ${destination.currency} spends roughly ${Math.round(destination.perUSD)} to the dollar — check the rate the week you travel.`,
-    tone: 'info',
-  })
+  const primary = destinations[0]
+  if (primary) {
+    const rate = primary.perUSD
+    const rateText = rate < 10 ? rate.toFixed(2) : Math.round(rate).toLocaleString('en-US')
+    const direction = rate < 1 ? 'costs' : 'spends'
+    tips.push({
+      title: 'Watch the exchange rate',
+      detail: `Cash is usually better than card abroad, but exchange at a mid-market rate. One US dollar ${direction} roughly ${rateText} ${primary.currency} — check the rate the week you travel.`,
+      tone: 'info',
+    })
+  }
 
   if (perDay > 150) {
     tips.push({

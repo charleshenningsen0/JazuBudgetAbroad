@@ -144,3 +144,29 @@ export function IconWarning({ className }: IconProps) {
     </svg>
   )
 }
+
+export function IconPlus({ className }: IconProps) {
+  return (
+    <svg {...base} className={className}>
+      <path d="M12 5v14M5 12h14" />
+    </svg>
+  )
+}
+
+export function IconTrash({ className }: IconProps) {
+  return (
+    <svg {...base} className={className}>
+      <path d="M4 7h16M9.5 7V4.8h5V7M6.5 7l.8 13h9.4l.8-13" />
+      <path d="M10.5 11v5m3-5v5" />
+    </svg>
+  )
+}
+
+export function IconTag({ className }: IconProps) {
+  return (
+    <svg {...base} className={className}>
+      <path d="M3.5 11.2V4.5a1 1 0 0 1 1-1h6.7a1 1 0 0 1 .7.3l8.3 8.3a1 1 0 0 1 0 1.4l-6.7 6.7a1 1 0 0 1-1.4 0L3.8 11.9a1 1 0 0 1-.3-.7Z" />
+      <circle cx="8" cy="8" r="1.4" />
+    </svg>
+  )
+}

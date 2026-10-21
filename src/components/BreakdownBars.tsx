@@ -1,14 +1,15 @@
 import type { ReactNode } from 'react'
 import type { CategoryLine } from '../lib/calc'
 import { formatUSD } from '../lib/format'
-import { IconBed, IconBus, IconFood, IconBag, IconTicket } from './Icons'
+import { IconBag, IconBed, IconBus, IconFood, IconTag, IconTicket } from './Icons'
 
 const ICONS: Record<string, ReactNode> = {
-  accommodation: <IconBed />,
+  bed: <IconBed />,
   food: <IconFood />,
-  transit: <IconBus />,
-  activities: <IconTicket />,
-  extras: <IconBag />,
+  bus: <IconBus />,
+  ticket: <IconTicket />,
+  bag: <IconBag />,
+  tag: <IconTag />,
 }
 
 interface Props {
@@ -23,10 +24,13 @@ export function BreakdownBars({ categories, livingTotal, days }: Props) {
     <ul className="breakdown">
       {categories.map((c) => (
         <li key={c.key} className="breakdown-row">
-          <span className={`breakdown-icon breakdown-icon--${c.key}`}>{ICONS[c.key]}</span>
+          <span className={`breakdown-icon breakdown-icon--${c.key}`}>{ICONS[c.icon]}</span>
           <span className="breakdown-body">
             <span className="breakdown-top">
-              <span className="breakdown-label">{c.label}</span>
+              <span className="breakdown-label">
+                {c.label}
+                {c.kind === 'custom' && <span className="badge">yours</span>}
+              </span>
               <span className="breakdown-amount">{formatUSD(c.amount)}</span>
             </span>
             <span className="breakdown-bar">

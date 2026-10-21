@@ -6,14 +6,6 @@ interface Props {
   onChange: (patch: Partial<TripInputs>) => void
 }
 
-const LENGTH_PRESETS = [
-  { label: '1 week', days: 7 },
-  { label: '2 weeks', days: 14 },
-  { label: '1 month', days: 30 },
-  { label: 'Semester', days: 120 },
-  { label: '1 year', days: 365 },
-]
-
 const AIRFARE_OPTIONS: Array<{ value: AirfareOption; label: string }> = [
   { value: 'none', label: 'No flights' },
   { value: 'oneway', label: 'One-way' },
@@ -23,32 +15,6 @@ const AIRFARE_OPTIONS: Array<{ value: AirfareOption; label: string }> = [
 export function TripDetails({ inputs, onChange }: Props) {
   return (
     <div className="details">
-      <div className="field">
-        <label className="field-label" htmlFor="days">
-          How long are you staying?
-        </label>
-        <NumberField
-          id="days"
-          value={inputs.days}
-          min={1}
-          max={1095}
-          suffix="days"
-          onChange={(days) => onChange({ days })}
-        />
-        <div className="presets">
-          {LENGTH_PRESETS.map((p) => (
-            <button
-              key={p.label}
-              type="button"
-              className={`chip ${inputs.days === p.days ? 'chip--active' : ''}`}
-              onClick={() => onChange({ days: p.days })}
-            >
-              {p.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
       <div className="field">
         <label className="field-label" htmlFor="travelers">
           How many students are sharing?
@@ -77,10 +43,11 @@ export function TripDetails({ inputs, onChange }: Props) {
             </button>
           ))}
         </div>
+        <p className="hint">Airfare is estimated as one return ticket per region you visit.</p>
       </div>
 
       <div className="field">
-        <span className="field-label">Don't forget</span>
+        <span className="field-label">Don&rsquo;t forget</span>
         <div className="switches">
           <label className="switch">
             <input

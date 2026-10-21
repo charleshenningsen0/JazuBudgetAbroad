@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
-import { DestinationPicker } from './components/DestinationPicker'
+import { LegsEditor } from './components/LegsEditor'
 import { TierSelector } from './components/TierSelector'
 import { TripDetails } from './components/TripDetails'
+import { CategorySelector } from './components/CategorySelector'
+import { CustomCostsEditor } from './components/CustomCostsEditor'
 import { ResultsPanel } from './components/ResultsPanel'
 import { BudgetCheckCard } from './components/BudgetCheckCard'
 import { BudgetField } from './components/BudgetField'
@@ -13,9 +15,7 @@ import { formatUSD } from './lib/format'
 import { decodeState, encodeState, shareUrl } from './lib/urlState'
 
 export default function App() {
-  const [inputs, setInputs] = useState<TripInputs>(() =>
-    decodeState(window.location.search),
-  )
+  const [inputs, setInputs] = useState<TripInputs>(() => decodeState(window.location.search))
   const [budget, setBudget] = useState<number | null>(null)
   const [copied, setCopied] = useState(false)
 
@@ -28,8 +28,15 @@ export default function App() {
   const estimate = useMemo(() => estimateTrip(inputs), [inputs])
   const budgetCheck = useMemo(() => checkBudget(estimate, budget), [estimate, budget])
   const tips = useMemo(
-    () => buildTips(estimate.destination, estimate.tier, inputs.days, estimate.perDay),
-    [estimate, inputs.days],
+    () =>
+      buildTips(
+        estimate.legs.map((l) => l.destination),
+        estimate.tier,
+        estimate.totalDays,
+        estimate.perDay,
+        inputs.travelers,
+      ),
+    [estimate, inputs.travelers],
   )
 
   function update(patch: Partial<TripInputs>) {
@@ -88,9 +95,24 @@ export default function App() {
         <section className="card card--form">
           <h2 className="card-title card-title--lead">Plan your trip</h2>
 
-          <DestinationPicker value={inputs.destinationId} onChange={(id) => update({ destinationId: id })} />
+          <LegsEditor
+            legs={inputs.legs}
+            onChange={(legs) => update({ legs })}
+            legCosts={estimate.legs.map((l) => l.amount)}
+            totalDays={estimate.totalDays}
+          />
 
           <TierSelector value={inputs.tier} onChange={(id) => update({ tier: id })} />
+
+          <CategorySelector
+            value={inputs.categories}
+            onChange={(categories) => update({ categories })}
+          />
+
+          <CustomCostsEditor
+            costs={inputs.customCosts}
+            onChange={(customCosts) => update({ customCosts })}
+          />
 
           <TripDetails inputs={inputs} onChange={update} />
 
@@ -113,7 +135,9 @@ export default function App() {
       <div className="sticky-total" aria-live="polite">
         <div className="sticky-total-inner">
           <span className="sticky-total-label">
-            {estimate.destination.city} &middot; {estimate.inputs.days} days
+            {estimate.legs.length > 1
+              ? `${estimate.legs.length} destinations · ${estimate.totalDays} days`
+              : `${estimate.legs[0]?.destination.city} · ${estimate.totalDays} days`}
           </span>
           <span className="sticky-total-value">{formatUSD(estimate.grandTotal)}</span>
         </div>
