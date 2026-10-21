@@ -7,6 +7,10 @@ actually have.
 
 **Live site:** https://jazubudget-abroad.vercel.app
 **Backup site (GitHub Pages):** https://charleshenningsen0.github.io/JazuBudgetAbroad/
+**Source:** https://github.com/charleshenningsen0/JazuBudgetAbroad
+
+Both are live and wired up to auto-deploy from the repository — push to `main`
+and both update.
 
 ---
 
@@ -135,7 +139,7 @@ scripts/
 The app is a **static site** — `npm run build` produces a `dist/` folder that
 any static host can serve. There is no backend, no database and no API key.
 
-### Option A — Vercel (already live)
+### Option A — Vercel (already live, auto-deploys)
 
 ```bash
 npm install -g vercel      # once
@@ -143,6 +147,9 @@ vercel login               # once
 vercel                     # preview deploy
 vercel --prod              # production deploy
 ```
+
+The project is already connected to the GitHub repository, so **every push to
+`main` redeploys automatically** — you do not need to run the CLI again.
 
 Settings Vercel auto-detected:
 
@@ -165,15 +172,15 @@ The `jazubudget-abroad.vercel.app` alias is what you share. It is exempt from
 Vercel's 30-day Hobby deployment retention, so it keeps serving as long as the
 alias points at it.
 
-### Option B — GitHub Pages (already live, permanent)
+### Option B — GitHub Pages (already live, permanent, auto-deploys)
 
-This is the most durable free option: Pages sites never expire.
+This is the most durable free option: Pages sites never expire. The workflow
+in `.github/workflows/deploy-pages.yml` builds and publishes `dist/` on every
+push to `main`, and Pages is already enabled with **GitHub Actions** as the
+build source.
 
-1. `.github/workflows/deploy-pages.yml` is already in the repo. It builds and
-   publishes `dist/` on every push to `main`.
-2. In the repo: **Settings → Pages → Build and deployment → Source: GitHub
-   Actions**.
-3. The site appears at `https://<user>.github.io/<repo>/`.
+If you ever need to re-enable it, go to
+**Settings → Pages → Build and deployment → Source: GitHub Actions**.
 
 Because `vite.config.ts` uses `base: './'`, the same build works at a domain
 root *and* in a repository sub-path — no extra configuration.
@@ -211,8 +218,10 @@ git push
 ```
 
 - **GitHub Pages** redeploys automatically (the workflow triggers on push).
-- **Vercel** redeploys automatically if you connect the GitHub repo in the
-  dashboard (*Project → Settings → Git*), otherwise run `vercel --prod` again.
+- **Vercel** redeploys automatically — the project is connected to the GitHub
+  repository, so a push triggers a new production build.
+
+Both are already connected, so `git push` is all it takes.
 
 ---
 
