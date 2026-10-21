@@ -115,6 +115,7 @@ export const DESTINATIONS: Destination[] = [
     visaGroup: 'Schengen',
     tip: 'Book Barcelona flats a few months out; T-mobilitat zones you out of the tourist core.',
   },
+  
   {
     id: 'madrid',
     city: 'Madrid',
@@ -1039,6 +1040,46 @@ export const DESTINATIONS: Destination[] = [
     visa: 0,
     tip: 'Auckland transport caps at a daily limit; student accommodation usually bills utilities weekly.',
   },
+
+{
+  id: 'seville',
+  city: 'Seville',
+  country: 'Spain',
+  region: 'Europe',
+  currency: 'EUR',
+  symbol: '€',
+  perUSD: 0.92,
+  lodging: 30,
+  food: 17,
+  transit: 4,
+  activities: 10,
+  extras: 7,
+  flight: 850,
+  visa: 0,
+  visaGroup: 'Schengen',
+  tip: 'Look for affordable tapas bars away from tourist areas, especially around Alameda de Hércules. Walking is often the easiest way to explore the historic center.',
+},
+{
+  id: 'valencia',
+  city: 'Valencia',
+  country: 'Spain',
+  region: 'Europe',
+  currency: 'EUR',
+  symbol: '€',
+  perUSD: 0.92,
+  lodging: 33,
+  food: 19,
+  transit: 5,
+  activities: 11,
+  extras: 8,
+  flight: 900,
+  visa: 0,
+  visaGroup: 'Schengen',
+  tip: 'Visit Mercat Central for fresh, affordable food and look for menú del día lunch specials. The city is bike-friendly, making cycling an inexpensive way to get around.',
+},
+
+
+  
 ]
 
 export const REGIONS: Region[] = [
